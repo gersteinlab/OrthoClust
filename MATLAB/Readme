@@ -20,7 +20,8 @@ for n=1:10
     Z=(squareform(pdist(s))==0);
     Zsum=Zsum+Z;
 end
-figure;imagesc(Zsum/trial>=f)%this matrix shows whether 2 nodes belong to the same module..
+%Zsum shows how often 2 nodes belong to the same module. The simulated modules emerged by thresholding the matrix.
+figure;imagesc(Zsum/trial>=f)
 
 
 2. co-expression networks for worm and fly
