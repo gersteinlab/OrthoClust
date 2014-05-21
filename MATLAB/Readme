@@ -4,6 +4,25 @@ orthoclust_2species.m	MATLAB code that optimizes the cost function of OrthoClust
 ./3rd_party_code contains 3rd party code used
 
 Example:
+1. a simple toy model
+load ./Data/simulated_nets;
+figure;imagesc(A2);
+figure;imagesc(A1);%these two networks consist of 4 modules
+kappa=1.5;
+N=length(A1)+length(A2);
+Zsum=zeros(N);
+f=0.3;
+trial=10;
+for n=1:10
+    clusters=orthoclust_2species(A1,A2,orthologs,kappa,1);
+    s=[clusters.species{1}' clusters.species{2}']';
+    Z=(squareform(pdist(s))==0);
+    Zsum=Zsum+Z;
+end
+figure;imagesc(Zsum/trial>=f)
+
+
+2. co-expression networks for worm and fly
 load ./Data/worm_fly_networks_info.mat;
 kappa=3;
 method=1;
