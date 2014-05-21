@@ -1,6 +1,7 @@
 orthoclust_2species.m	MATLAB code that optimizes the cost function of OrthoClust. It contains a function performing simulated annealing and an alternate function based on steepest descent. enter "help orthoclust_2species" in the matlab command line for details. 
 
 ./Data/worm_fly_networks_info.mat	contains the co-expression networks of worm, and fly and the list of worm-fly orthologs. all indexed by wormbase and flybase IDs
+./Data/simulated_nets.mat contains two simulated networks, and their orthologs 
 ./3rd_party_code contains 3rd party code used
 
 Example:
@@ -19,7 +20,7 @@ for n=1:10
     Z=(squareform(pdist(s))==0);
     Zsum=Zsum+Z;
 end
-figure;imagesc(Zsum/trial>=f)
+figure;imagesc(Zsum/trial>=f)%this matrix shows whether 2 nodes belong to the same module..
 
 
 2. co-expression networks for worm and fly
