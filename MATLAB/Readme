@@ -1,3 +1,21 @@
+orthoclustN.m	MATLAB code that optimizes the cost function of OrthoClust for N species. It made use of an efficient code written by Mucha and Porter that implemented the Louvain algorithm for modularity optimization. Please download Mucha and Porter’s code via http://netwiki.amath.unc.edu/GenLouvain/GenLouvain (in the 3rd party code folder also), and store it in a folder in MATLAB path.
+To run this the wrapper, one needs to store the networks and orthologous relationships in 2 cell arrays.
+see help orthoclustN for details.
+The new wrapper is a much more efficient than the earlier 2-species versions. We are currently packaging the code via other languages. Please let us know (koon-kiu.yan@yale.edu) if you find bugs or questions.
+
+Example:
+load ./Data/worm_fly_networks_info.mat;
+kappa=3;
+A=cell(2,1);
+A{1}=Aw;
+A{2}=Af;
+O_pairs=cell(2,2);
+O_pairs{1,2}=orthologs23;
+[assign,Q]=orthoclustN(A,O_pairs,kappa);
+
+
+Earlier version:
+
 orthoclust_2species.m	MATLAB code that optimizes the cost function of OrthoClust. It contains a function performing simulated annealing and an alternate function based on steepest descent. enter "help orthoclust_2species" in the matlab command line for details. 
 
 ./Data/worm_fly_networks_info.mat	contains the co-expression networks of worm, and fly and the list of worm-fly orthologs. all indexed by wormbase and flybase IDs
@@ -29,3 +47,6 @@ load ./Data/worm_fly_networks_info.mat;
 kappa=3;
 method=1;
 clusters=orthoclust_2species(Aw,Af,orthologs23,kappa,method)
+
+KKY: 9/11/2014
+
