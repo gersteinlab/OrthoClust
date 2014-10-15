@@ -4,6 +4,39 @@ see help orthoclustN for details.
 The new wrapper is a much more efficient than the earlier 2-species versions. We are currently packaging the code via other languages. Please let us know (koon-kiu.yan@yale.edu) if you find bugs or questions.
 
 Example:
+1. a simple toy model
+load ./Data/simulated_nets;
+figure;imagesc(A2);
+figure;imagesc(A1);%these two networks consist of 4 modules
+kappa=1.5;
+A=cell(2,1);
+A{1}=A1;
+A{2}=A2;
+O_pairs=cell(2,2);
+O_pairs{1,2}=orthologs;
+[assign,Q]=orthoclustN(A,O_pairs,kappa);
+here Q is the modularity function, assign{1} and assign{2} store the module IDs of individual genes in Aw and Af respectively. for example
+a1=assign{1};
+a2=assign{2};
+find(a1==4) are the genes in network 1 belong to module ID=4
+find(a2==4) are the genes in network 2 belong to the same module ID=4
+as a heuristic, it’s not necessary to repeat the Louvain algorithm multiple times. but to construct a heat map like the one in the manuscript, for example,
+N=length(A1)+length(A2);
+Zsum=zeros(N);
+trial=10;
+threshold=0.9;
+for n=1:trial
+    [assign Q]=orthoclustN(A,O_pairs,kappa);
+    s=[assign{1}’ assign{2}’]’;
+    Z=(squareform(pdist(s))==0);
+    Zsum=Zsum+Z;
+end
+figure;imagesc(Zsum/trial>=f);
+Zsum shows how often 2 nodes belong to the same module. for example, for node i is A1 and node j in A2, see
+Zsum(i,length(A1)+j)
+The simulated modules emerged by thresholding the matrix.
+
+2. co-expression network for worm and fly
 load ./Data/worm_fly_networks_info.mat;
 kappa=3;
 A=cell(2,1);
@@ -12,6 +45,11 @@ A{2}=Af;
 O_pairs=cell(2,2);
 O_pairs{1,2}=orthologs23;
 [assign,Q]=orthoclustN(A,O_pairs,kappa);
+
+3. for N networks
+similar to the case N=2, see documentation in the code.
+help orthoclustN
+
 
 
 Earlier version:
@@ -48,5 +86,5 @@ kappa=3;
 method=1;
 clusters=orthoclust_2species(Aw,Af,orthologs23,kappa,method)
 
-KKY: 9/11/2014
+KKY: 10/15/2014
 
