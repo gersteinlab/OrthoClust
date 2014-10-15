@@ -31,7 +31,7 @@ for n=1:trial
     Z=(squareform(pdist(s))==0);
     Zsum=Zsum+Z;
 end
-figure;imagesc(Zsum/trial>=f);
+figure;imagesc(Zsum/trial>=threshold);
 Zsum shows how often 2 nodes belong to the same module. for example, for node i is A1 and node j in A2, see
 Zsum(i,length(A1)+j)
 The simulated modules emerged by thresholding the matrix.
