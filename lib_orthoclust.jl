@@ -2,11 +2,8 @@ using MAT;
 using Graphs;
 using DataFrames;
 
-#W is the observed - 
-#E_W is null in w_i*w_j/sum(W)
+
 function optimize_network_modularity_louvain(W,order)
-#B is the generalized modularity matrix, and sW is sum of all elts in W, ~ to 2M
-#perform the step of louvain, returns renormalized networks..
 #order=1, forward
 #order=-1, backward
 #order=0, random
@@ -192,10 +189,16 @@ function generate_mapping_id(networks);
 
 end
 
-function expand_mat(networks,ortho,gamma)
+function expand_mat(networks,ortho)
 
     num_species=size(networks,1);
+    aux=ones(Int,(num_species,num_species));
+    aux=triu(aux-diagm(diag(aux)));
+    (aux1,aux2,aux3)=findnz(aux);
+    pairs=[aux1 aux2];
+
     N_networks,mapping_b2s, mapping_s2b=generate_mapping_id(networks);
+    tot_nodes=sum(N_networks);
     for i=1:num_species
         net=networks[i];
         if net==net'
@@ -204,7 +207,7 @@ function expand_mat(networks,ortho,gamma)
         (u,v,w)=findnz(net);
         id=mapping_s2b[i];
         u=id[u];v=id[v];        
-        if i.==1
+        if i==1
             all_e1=u;
             all_e2=v;
         else
@@ -222,19 +225,34 @@ function expand_mat(networks,ortho,gamma)
         iz=find(ortho[:,1].==j);
         mapping=mapping_s2b[j];
         if ~isempty(iz)
-            ortho_transform[iz,3]=mapping[ortho[iz,3]];
+            ortho_transform[iz,4]=mapping[ortho[iz,4]];
         end
         iz2=find(ortho[:,2].==j);
         if ~isempty(iz2)
-            ortho_transform[iz2,4]=mapping[ortho[iz2,4]];
+            ortho_transform[iz2,5]=mapping[ortho[iz2,5]];
         end
     end
 
-    tot_nodes=sum(N_networks);
+    couple_const=zeros(Int,size(pairs,1));
+    for i=1:size(pairs,1);
+        i_pick=find((ortho[:,1].==pairs[1,1]).*ortho[:,2].==pairs[1,2]);
+        couple_const[i]=unique(ortho[i_pick,3])[1];
+        couple_mat=sparse(ortho[i_pick,4],ortho[i_pick,5],ones(size(i_pick)));
+        d1=full(sum(couple_mat,2));
+        d2=full(sum(couple_mat,1))';
+        o1=d1[ortho[i_pick,4]];
+        o2=d2[ortho[i_pick,5]];
+        Ow=(1./o1+1./o2)/2;
+        if i.==1;
+            ortho_couple=Ow;
+        else
+            ortho_couple=vcat(ortho_couple,Ow*couple_const[i]);
+        end
+    end
 
-    all_e1=vcat(all_e1,ortho_transform[:,3]);
-    all_e2=vcat(all_e2,ortho_transform[:,4]);
-    e12_values=vcat(e12_values,ones(Float64,size(ortho_transform,1))*gamma);
+    all_e1=vcat(all_e1,ortho_transform[:,4]);
+    all_e2=vcat(all_e2,ortho_transform[:,5]);
+    e12_values=vcat(e12_values,ortho_couple);
 
     big_mat=sparse(all_e1,all_e2,e12_values,tot_nodes,tot_nodes);
     tmp=spdiagm(diag(big_mat));
@@ -246,20 +264,17 @@ function expand_mat(networks,ortho,gamma)
 
 end
 
-function multiplex_louvain(networks,ortho,gamma);
+function multiplex_louvain(networks,ortho);
 
-    big_mat=expand_mat(networks,ortho,gamma);
+    big_mat=expand_mat(networks,ortho);
     final_assign, Q, Brenorm, Wrenorm=optimize_network_modularity_louvain(big_mat,0);
     N_networks,mapping_b2s, mapping_s2b=generate_mapping_id(networks);
-    output=[mapping_id final_assign];
+    output=[mapping_b2s final_assign];
     writedlm("./genes_to_clusters.out",output);
 
     return output;
 
 end
-
-
-
 
 
 #function get_coexp_net(C,d)

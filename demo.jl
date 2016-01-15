@@ -13,6 +13,4 @@ networks=Array{Any}(2);
 networks[1]=Aw;
 networks[2]=Af;
 
-gamma=.5;
-
-output=multiplex_louvain(networks,ortho,gamma);
+output=multiplex_louvain(networks,ortho);

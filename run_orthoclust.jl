@@ -5,7 +5,7 @@ for x in ARGS;
 	files=vcat(files,x)
 end
 
-networks=Array{Any}(length(files)-2);
+networks=Array{Any}(length(files)-1);
 
 for i=1:length(networks);
 	X=readdlm(files[i],Int64);
@@ -14,7 +14,6 @@ for i=1:length(networks);
 	networks[i]=net;
 end
 
-ortho=readdlm(files[end-1],Int64);
-gamma=float(files[end]);
+ortho=readdlm(files[end],Int64);
 
-multiplex_louvain(networks,ortho,gamma);
+multiplex_louvain(networks,ortho);
