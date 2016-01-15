@@ -1,3 +1,5 @@
+OrthoClust
+
 OrthoClust is a clustering algorithm built on a multilayer network framework. It concatenates networks from individual species by their orthology relationships, arriving at a multiplex network. By optimizing the a generalized modularity function, OrthoClust returns a set of modules that could be either conserved or species-specific.
 
 INPUT FILES:
