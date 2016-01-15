@@ -7,8 +7,8 @@ function optimize_network_modularity_louvain(W,order)
 #order=1, forward
 #order=-1, backward
 #order=0, random
-	
-	N=size(W,1);
+
+N=size(W,1);
     i_no_dark=find(sum(abs(W),1).>0);
     N_no_dark=length(i_no_dark);
 
@@ -76,7 +76,7 @@ function iterate_network_modularity(Bcompact,Wcompact,order);
         for j=1:Nb
             x=u[j];
             # spin=sigma[i];
-            display(j);
+            # display(j);
             spin=sigma[x];
             c=Bcompact[x,:];
             c[x]=0;#this is important step to make sure the deltaQ is right 
