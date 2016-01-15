@@ -234,6 +234,7 @@ function expand_mat(networks,ortho)
     end
 
     couple_const=zeros(Int,size(pairs,1));
+    ortho_couple=[];
     for i=1:size(pairs,1);
         i_pick=find((ortho[:,1].==pairs[1,1]).*ortho[:,2].==pairs[1,2]);
         couple_const[i]=unique(ortho[i_pick,3])[1];
