@@ -24,6 +24,8 @@ The minimal number of network files is 2. If there are more than 2 networks, sim
 
 If you prefer to run OrthoClust in a Julia interactive shell, see demo.jl and lib_orthoclust.jl
 
+The current implementation is quite time consuming. The test data, which consists of ~35000 genes, take about 3 hour to finish in a single node.
+
 FURTHER DETAILS:
 
 The framework and the objective function of OrthoClust are explained in Yan et al. Genome Biology 2014 (see reference below). The optimization was implemented by simulated annealing in the paper. The Julia version employs a heuristic (the Louvain algorithm) to speed up the process. The algorithm has a stochastic procedure, one could repeat the algorithm for more robust results. We may include auxillary functions like visualization tools later.
