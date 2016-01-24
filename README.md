@@ -36,4 +36,3 @@ While the concept was developed for integrating networks across species by ortho
 REFERENCE:
 
 OrthoClust: an orthology-based network framework for clustering data across multiple species. Yan et al. Genome Biology 2014, 15:R100
-=======
